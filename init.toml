@@ -1,0 +1,3 @@
+[options]
+ bootstrap_before = "init#before"
+ bootstrap_after = "init#after"
