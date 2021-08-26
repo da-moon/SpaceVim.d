@@ -13,7 +13,7 @@ function! before#spacevim#themes#bootstrap()
   call SpaceVim#logger#info("[ before#spacevim#themes#bootstrap ] function called.")
   for plugin in s:plugins
     call SpaceVim#logger#info("[ before#spacevim#themes#bootstrap ] adding '" . plugin . "' plugin")
-    " call add(g:spacevim_custom_plugins,[plugin,{ 'merged': '0' }])
+    call add(g:spacevim_custom_plugins,[plugin,{ 'merged': '0' }])
   endfor
   let l:remainder = localtime() % len(s:themes)
   let l:selected=s:themes[l:remainder]
