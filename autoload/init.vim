@@ -1,5 +1,6 @@
 let g:spacevim_custom_plugins = [
   \ ['jvirtanen/vim-hcl',{ 'on_ft' : 'hcl'}],
+  \ ['mboughaba/i3config.vim',{ 'on_ft' : ['i3','i3config']}],
   \ ['neoclide/coc.nvim'],
   \ ['mg979/vim-visual-multi'],
   \ ['will133/vim-dirdiff'],
