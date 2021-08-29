@@ -69,6 +69,8 @@ function! init#before() abort
     call add(g:coc_extensions,'coc-fzf-preview')
   end
   call before#spacevim#generic#bootstrap()
+  " call before#spacevim#filemanager#defx()
+  call before#spacevim#filemanager#chadtree()
   call before#spacevim#nvim#bootstrap()
   call before#spacevim#mapping#bootstrap()
   call before#spacevim#tasks#bootstrap()

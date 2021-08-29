@@ -33,14 +33,6 @@ function! before#spacevim#generic#tabsizes() abort
   call SpaceVim#logger#info("[ before#spacevim#generic#tabsizes ] setting yaml file tab sizes")
   au BufNewFile,BufRead *.yml,*.yaml setlocal expandtab tabstop=4 shiftwidth=2
 endfunction
-function! before#spacevim#generic#filemanager() abort
-  call SpaceVim#logger#info("[ before#spacevim#generic#filemanager ] function called.")
-  let g:spacevim_filemanager="defx"
-  call SpaceVim#logger#info("[ before#spacevim#generic#filemanager ] default file manager was set to '".g:spacevim_filemanager."'.")
-  let g:spacevim_filetree_direction="left"
-  call SpaceVim#logger#info("[ before#spacevim#generic#filemanager ] filetree direction was set to to '".g:spacevim_filetree_direction."'")
-  let g:spacevim_enable_vimfiler_gitstatus="true"
-endfunction
 function! before#spacevim#generic#column() abort
   call SpaceVim#logger#info("[ before#spacevim#generic#column ] function called.")
   let spacevim_max_column = 80
@@ -50,11 +42,11 @@ endfunction
 function! before#spacevim#generic#bootstrap()
   call SpaceVim#logger#info("[ before#spacevim#generic#bootstrap ] function called.")
   call before#spacevim#generic#variables()
-  call before#spacevim#generic#filemanager()
   call before#spacevim#generic#column()
    if &term =~ 'screen'
     set term=xterm-256color
   endif
+  set encoding=UTF-8
   call SpaceVim#logger#info("[ before#spacevim#generic#bootstrap ] Default to case insensitive searches.")
   set ignorecase
   set smartcase
