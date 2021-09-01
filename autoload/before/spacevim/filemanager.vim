@@ -61,7 +61,6 @@ function! before#spacevim#filemanager#chadtree() abort
               \ | vertical resize 40
               \ | call win_gotoid(cur_winid)
               \ | endif
-
   augroup END
 
     " autocmd TermOpen * if &buftype == 'terminal' | setl nonumber | startinsert| endif

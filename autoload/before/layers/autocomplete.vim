@@ -1,15 +1,11 @@
 function! before#layers#autocomplete#bootstrap()
-    call SpaceVim#logger#info("[ before#layers#autocomplete# ] function called.")
-    call add(g:spacevim_layers,'autocomplete')
-  " let g:spacevim_autocomplete_method = "coc"
-  " let g:spacevim_auto_completion_return_key_behavior = "complete"
-  " let g:spacevim_auto_completion_tab_key_behavior = "smart"
-    call SpaceVim#layers#autocomplete#set_variable({
-      \ 'autocomplete_method' : 'coc',
-      \ 'auto_completion_return_key_behavior' : 'complete',
-      \ 'auto_completion_tab_key_behavior':'smart' ,
-    \ })
-    call before#layers#autocomplete#coc()
+  call SpaceVim#logger#info("[ before#layers#autocomplete# ] function called.")
+  let g:spacevim_layers['autocomplete']={
+    \ 'autocomplete_method' : 'coc',
+    \ 'auto_completion_return_key_behavior' : 'complete',
+    \ 'auto_completion_tab_key_behavior': 'smart' ,
+  \ }
+  call before#layers#autocomplete#coc()
 endfunction
 function! before#layers#autocomplete#coc()
   call SpaceVim#logger#info("[ before#layers#autocomplete#coc ] function called.")

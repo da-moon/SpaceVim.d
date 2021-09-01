@@ -1,6 +1,6 @@
 function! before#lang#vim#bootstrap()
   call SpaceVim#logger#info('[ before#lang#vim#bootstrap ] function called.')
-  call add(g:spacevim_layers,'lang#vim')
+      let g:spacevim_layers['lang#vim']={}
   call add(g:coc_extensions,'coc-vimlsp')
   call before#lang#vim#linter()
 endfunction

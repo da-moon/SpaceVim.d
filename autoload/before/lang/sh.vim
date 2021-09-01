@@ -1,7 +1,7 @@
 function! before#lang#sh#bootstrap()
   call SpaceVim#logger#info('[ before#lang#sh#bootstrap ] function called.')
     if executable('sh')
-      call add(g:spacevim_layers,'lang#sh')
+      let g:spacevim_layers['lang#sh']={}
       call add(g:coc_extensions,'coc-sh')
       let g:lsp_servers['sh']='bash-language-server'
       let g:coc_languageserver['bash']={

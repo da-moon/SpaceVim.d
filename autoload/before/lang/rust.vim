@@ -2,7 +2,7 @@ function! before#lang#rust#bootstrap()
   call SpaceVim#logger#info("[ before#lang#rust#bootstrap ] function called.")
   if executable('rustup')
     call SpaceVim#logger#info("[ before#spacevim#rust#bootstrap ] rustup detected.adding associated plugins and configuration.")
-    call add(g:spacevim_layers,'lang#rust')
+    let g:spacevim_layers['lang#rust']={}
     let g:lsp_servers['rust']='rustup'
     let g:lsp_override_cmd['rust']=["rustup", "run", "nightly", "rust-analyzer"]
     let g:coc_preferences['rust-analyzer.updates.askBeforeDownload']=v:false

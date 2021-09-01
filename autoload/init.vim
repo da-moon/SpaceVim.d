@@ -8,21 +8,21 @@ let g:spacevim_custom_plugins = [
   \ ['machakann/vim-highlightedyank'],
   \ ['sheerun/vim-polyglot'],
 \ ]
-let g:spacevim_layers=[
-  \ 'colorscheme',
-  \ 'tools',
-  \ 'ctrlspace',
-  \ 'ui',
-  \ 'git',
-  \ 'github',
-  \ 'foldsearch',
-  \ 'core#statusline',
-  \ 'lang#extra',
-  \ 'lang#markdown',
-  \ 'lang#toml',
-  \ 'lang#json',
-  \ 'lang#yaml',
-\]
+let g:spacevim_layers={
+  \ 'colorscheme' : {},
+  \ 'tools': {},
+  \ 'ctrlspace' : {},
+  \ 'ui' : {},
+  \ 'git': {},
+  \ 'github' : {},
+  \ 'foldsearch':{},
+  \ 'core#statusline':{},
+  \ 'lang#extra':{},
+  \ 'lang#markdown':{},
+  \ 'lang#toml':{},
+  \ 'lang#json':{},
+  \ 'lang#yaml':{},
+\ }
 let g:coc_extensions = [
   \ 'coc-marketplace',
   \ 'coc-markdownlint',
@@ -60,12 +60,12 @@ function! init#before() abort
     call add(g:spacevim_custom_plugins,['vmchale/just-vim',{ 'on_ft': 'justfile' }])
   end
   if executable('sudo')
-      call SpaceVim#logger#info("[ init#before ] 'sudo' binary detected. Adding associated layer")
-    call add(g:spacevim_layers,'sudo')
+    call SpaceVim#logger#info("[ init#before ] 'sudo' binary detected. Adding associated layer")
+    let g:spacevim_layers['sudo']={}
   end
   if executable('fzf')
     call SpaceVim#logger#info("[ init#before ] 'fzf' binary detected. Adding associated layer")
-    call add(g:spacevim_layers,'fzf')
+    let g:spacevim_layers['fzf']={}
     call add(g:coc_extensions,'coc-fzf-preview')
   end
   call before#spacevim#generic#bootstrap()
@@ -89,11 +89,12 @@ function! init#before() abort
   call before#layers#checkers#bootstrap()
   call before#layers#format#bootstrap()
   call before#layers#gtags#bootstrap()
-  call before#layers#lsp#bootstrap()
   call before#layers#shell#bootstrap()
-  for layer in g:spacevim_layers
-    call SpaceVim#logger#info("[ init#before ] loading ****'" . layer . "' spacevim layer")
-    call SpaceVim#layers#load(layer)
+  call before#layers#lsp#bootstrap()
+  for layer in keys(g:spacevim_layers)
+    call SpaceVim#logger#info("[ init#before ] loading '" . layer . "' spacevim layer")
+    let l:config=g:spacevim_layers[layer]
+    call SpaceVim#layers#load(layer,l:config)
   endfor
 endfunction
 function! init#after() abort
