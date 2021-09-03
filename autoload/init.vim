@@ -1,3 +1,4 @@
+autocmd VimEnter * call dein#call_hook('post_source')
 let g:spacevim_custom_plugins = [
   \ ['jvirtanen/vim-hcl',{ 'on_ft' : 'hcl'}],
   \ ['mboughaba/i3config.vim',{ 'on_ft' : ['i3','i3config']}],
@@ -69,8 +70,12 @@ function! init#before() abort
     call add(g:coc_extensions,'coc-fzf-preview')
   end
   call before#spacevim#generic#bootstrap()
-  " call before#spacevim#filemanager#defx()
-  call before#spacevim#filemanager#chadtree()
+  if has('nvim')
+    call before#spacevim#filemanager#coc_explorer()
+    " call before#spacevim#filemanager#chadtree()
+  else
+    call before#spacevim#filemanager#defx()
+  end
   call before#spacevim#nvim#bootstrap()
   call before#spacevim#mapping#bootstrap()
   call before#spacevim#tasks#bootstrap()

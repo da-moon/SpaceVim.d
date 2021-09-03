@@ -3,7 +3,7 @@ function! before#lang#go#bootstrap()
   call SpaceVim#logger#info('[ before#lang#go#bootstrap ] function called.')
   if executable('go')
     call SpaceVim#logger#info('[ before#spacevim#golang#bootstrap ] go toolchain detected. Adding associated vim plugin and configuration')
-    call add(g:spacevim_custom_plugins,['fatih/vim-go',{ 'on_ft' : 'go'}])
+    call add(g:spacevim_custom_plugins,['fatih/vim-go',{ 'on_ft' : 'go','build': ':GoUpdateBinaries','hook_post_update': ':GoUpdateBinaries' }])
     let g:spacevim_layers['lang#go']={}
     call add(g:coc_extensions,'coc-go')
     call add(g:coc_filetypes,'go')
