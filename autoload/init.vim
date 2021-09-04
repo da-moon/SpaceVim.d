@@ -71,8 +71,8 @@ function! init#before() abort
   end
   call before#spacevim#generic#bootstrap()
   if has('nvim')
-    call before#spacevim#filemanager#coc_explorer()
-    " call before#spacevim#filemanager#chadtree()
+    " call before#spacevim#filemanager#coc_explorer()
+    call before#spacevim#filemanager#chadtree()
   else
     call before#spacevim#filemanager#defx()
   end
