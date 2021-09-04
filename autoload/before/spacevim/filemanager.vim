@@ -65,6 +65,7 @@ function! before#spacevim#filemanager#chadtree() abort
   autocmd bufenter * if (winnr("$") == 1 && &buftype == "nofile" && &filetype == "CHADTree") | q! | endif
   augroup Chadtree
     autocmd!
+    au VimEnter * :if bufname()=='' | call execute('call CHADtreeToggle()') | endif
     autocmd BufEnter *
               \ if ( exists("g:chadtree_winid") && win_id2win(g:chadtree_winid) > 0)
               \ | let cur_winid = win_getid()
