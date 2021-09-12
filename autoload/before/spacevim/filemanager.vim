@@ -39,7 +39,7 @@ function! before#spacevim#filemanager#chadtree() abort
   let g:spacevim_filemanager=""
   let g:spacevim_filetree_direction=""
   let g:spacevim_enable_vimfiler_gitstatus=""
-  call add(g:spacevim_custom_plugins,['ms-jpq/chadtree',{'build': 'python3 -m chadtree deps --nvim'}])
+  call add(g:spacevim_custom_plugins,['ms-jpq/chadtree',{'build': 'python3 -m chadtree deps --nvim','hook_post_update': ':UpdateRemotePlugins'}])
   call SpaceVim#logger#info("[ before#spacevim#filemanager#chadtree ] setting up key bindings.")
   call SpaceVim#custom#SPC('nnoremap', ['f', 't'], 'call CHADtreeToggle()', 'toggle-file-tree', 1)
   call SpaceVim#custom#SPC('nnoremap', ['f', 'y'], 'CHADopen', 'toggle-file-tree', 1)
