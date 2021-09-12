@@ -2,6 +2,7 @@ autocmd VimEnter * call dein#call_hook('post_source')
 let g:spacevim_custom_plugins = [
   \ ['jvirtanen/vim-hcl',{ 'on_ft' : 'hcl'}],
   \ ['mboughaba/i3config.vim',{ 'on_ft' : ['i3','i3config']}],
+  \ ['junegunn/vim-easy-align'],
   \ ['neoclide/coc.nvim'],
   \ ['mg979/vim-visual-multi'],
   \ ['will133/vim-dirdiff'],
@@ -19,24 +20,16 @@ let g:spacevim_layers={
   \ 'foldsearch':{},
   \ 'core#statusline':{},
   \ 'lang#extra':{},
-  \ 'lang#markdown':{},
   \ 'lang#toml':{},
-  \ 'lang#json':{},
-  \ 'lang#yaml':{},
 \ }
+  " \ 'coc-grammarly',
 let g:coc_extensions = [
   \ 'coc-marketplace',
-  \ 'coc-markdownlint',
   \ 'coc-tabnine',
   \ 'coc-todolist',
   \ 'coc-spell-checker',
   \ 'coc-cspell-dicts',
-  \ 'coc-grammarly',
-  \ 'coc-json',
-  \ 'coc-format-json',
-  \ 'coc-yaml',
   \ 'coc-tasks',
-  \ 'coc-reveal',
 \]
 let g:coc_preferences = {
   \ 'autoTrigger': 'always',
@@ -89,6 +82,9 @@ function! init#before() abort
   call before#lang#ruby#bootstrap()
   call before#lang#python#bootstrap()
   call before#lang#rust#bootstrap()
+  call before#lang#markdown#bootstrap()
+  call before#lang#json#bootstrap()
+  call before#lang#yaml#bootstrap()
 " ─── LOAD AND CONFIGURE SPACEVIM LAYERS ─────────────────────────────────────────
   call before#layers#autocomplete#bootstrap()
   call before#layers#checkers#bootstrap()

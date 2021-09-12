@@ -9,7 +9,7 @@ function! before#lang#vim#linter()
   if executable('vimlparser')
     call SpaceVim#logger#info("[ before#lang#vim##linter ] vimlparser executable detected")
     command! LintVimLParser :silent cexpr system('vimlparser ' . expand('%') . ' > /dev/null')
-    augroup lint-vimlparser
+    augroup lint_vimlparser
       autocmd!
       autocmd BufWritePost *.vim LintVimLParser
     augroup END

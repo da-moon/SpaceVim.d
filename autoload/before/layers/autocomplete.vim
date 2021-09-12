@@ -9,24 +9,12 @@ function! before#layers#autocomplete#bootstrap()
 endfunction
 function! before#layers#autocomplete#coc()
   call SpaceVim#logger#info("[ before#layers#autocomplete#coc ] function called.")
-  call SpaceVim#logger#info("[ before#layers#autocomplete#coc ] binding coc-nvim group to 'C'.")
-  call SpaceVim#custom#SPCGroupName(['C'], '+Coc-nvim')
   call SpaceVim#custom#SPC('nore', ['C', 'h'], 'ShowDoc', 'Show current symbol help', 1)
   call SpaceVim#custom#SPC('nore', ['C', 'r'], 'Refactor', 'Open coc-refactor window', 1)
   call SpaceVim#custom#SPC('nore', ['C', 'n'], 'RenameSym', 'Rename cword symbol', 1)
   call SpaceVim#custom#SPC('nore', ['C', 'R'], 'CocCommand workspace.renameCurrentFile', 'Rename current file ,update imports', 1)
-  
-  call before#layers#autocomplete#json()
   call before#layers#autocomplete#list()
   call before#layers#autocomplete#refactor()
-endfunction
-function! before#layers#autocomplete#json()
-  call SpaceVim#logger#info("[ before#layers#autocomplete#json ] function called.")
-  call SpaceVim#logger#info("[ before#layers#autocomplete#json ] setting coc-json key bindings.")
-  call SpaceVim#custom#SPCGroupName(['C','j'], '+Coc-json')
-  call SpaceVim#logger#info("[ before#layers#autocomplete#json ] setting coc-format-json key bindings.")
-  call SpaceVim#custom#SPC('nore', ['C', 'j','f'], 'CocCommand formatJson --quote-as-needed --indent=2 --quote="', 'Formats whole JSON file', 1)
-  call SpaceVim#custom#SPC('nore', ['C', 'j','v'], 'CocCommand formatJson.selected --quote-as-needed --indent=2 --quote="', 'Format selected text', 1)
 endfunction
 function! before#layers#autocomplete#list()
   call SpaceVim#logger#info("[ before#layers#autocomplete#list ] function called.")
@@ -40,11 +28,11 @@ function! before#layers#autocomplete#refactor()
   call SpaceVim#logger#info("[ before#layers#autocomplete#refactor ] function called.")
   " https://github.com/rohit-s8/SpaceVim.d/blob/master/before.vim
   for ft in g:coc_filetypes
-    call SpaceVim#custom#LangSPCGroupName(ft, ['r'], '+Code Refactor')
-    call SpaceVim#custom#LangSPC(ft, 'nmap', ['r', 'n'], '<plug>(coc-rename)', 'Rename Symbol', 0)
-    call SpaceVim#custom#LangSPC(ft, 'nmap', ['r', 'R'], '<plug>(coc-refactor)', 'Refactor', 0)
-    call SpaceVim#custom#LangSPC(ft, 'nmap', ['r', 'i'], 'call CocActionAsync("organizeImport")', 'Sort imports', 1)
-    call SpaceVim#custom#LangSPC(ft, 'nmap', ['a'], '<plug>(coc-codeaction)', 'Show Available Actions', 0)
+    call SpaceVim#custom#LangSPCGroupName(ft, ['C','r'], '+Code Refactor')
+    call SpaceVim#custom#LangSPC(ft, 'nmap', ['C' ,'r', 'n'], '<plug>(coc-rename)', 'Rename Symbol', 0)
+    call SpaceVim#custom#LangSPC(ft, 'nmap', ['C','r', 'R'], '<plug>(coc-refactor)', 'Refactor', 0)
+    call SpaceVim#custom#LangSPC(ft, 'nmap', ['C','r', 'i'], 'call CocActionAsync("organizeImport")', 'Sort imports', 1)
+    call SpaceVim#custom#LangSPC(ft, 'nmap', ['C','a'], '<plug>(coc-codeaction)', 'Show Available Actions', 0)
   endfor
 endfunction
 
