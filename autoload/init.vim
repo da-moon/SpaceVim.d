@@ -23,7 +23,7 @@ let g:spacevim_layers={
   \ 'lang#toml':{},
 \ }
   " \ 'coc-grammarly',
-let g:coc_extensions = [
+let g:coc_global_extensions = [
   \ 'coc-marketplace',
   \ 'coc-tabnine',
   \ 'coc-todolist',
@@ -60,14 +60,14 @@ function! init#before() abort
   if executable('fzf')
     call SpaceVim#logger#info("[ init#before ] 'fzf' binary detected. Adding associated layer")
     let g:spacevim_layers['fzf']={}
-    call add(g:coc_extensions,'coc-fzf-preview')
+    call add(g:coc_global_extensions,'coc-fzf-preview')
   end
   call before#spacevim#generic#bootstrap()
   if has('nvim')
+    " call before#spacevim#filemanager#defx()
     call before#spacevim#filemanager#chadtree()
   else
     call before#spacevim#filemanager#coc_explorer()
-    " call before#spacevim#filemanager#defx()
   end
   call before#spacevim#nvim#bootstrap()
   call before#spacevim#mapping#bootstrap()
@@ -100,12 +100,7 @@ function! init#before() abort
 endfunction
 function! init#after() abort
   call SpaceVim#logger#info("[ init#after ] function called")
-  call after#coc#install#bootstrap()
+  call after#coc#setup#bootstrap()
   set showcmd
   nnoremap <silent> [Window]a :cclose<CR>:lclose<CR>
-endfunction
-function! PrintCocExtensions()
-	for plugin in g:coc_extensions
-		echon plugin " "
-	endfor
 endfunction

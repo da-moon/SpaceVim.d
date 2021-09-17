@@ -22,15 +22,12 @@ function! before#spacevim#mapping#bootstrap() abort
   call before#spacevim#mapping#search()
   call before#spacevim#mapping#align()
 endfunction
-" [ NOTE ] => https://github.com/junegunn/vim-easy-align
+" [ NOTE ] => 
+" - https://github.com/junegunn/vim-easy-align#examples-using-predefined-rules
 function! before#spacevim#mapping#align() abort
-  call SpaceVim#custom#SPCGroupName(['A'], '+Vim-easy-align')
-    " Start interactive EasyAlign in visual mode (e.g. vipga)
-    xmap ga <Plug>(EasyAlign)
-    " Start interactive EasyAlign for a motion/text object (e.g. gaip)
-    nmap ga <Plug>(EasyAlign)
-  " call SpaceVim#custom#SPC('xmap', ['A', 'a'], '<plug>(EasyAlign)', 'start-interactive-easy-align-in-visual-mode',1)
-  " call SpaceVim#custom#SPC('nmap', ['A', 'a'], '<plug>(EasyAlign)', 'start-interactive-easy-align-for-a-motion-or-text-object',1)
-  " xmap ga <Plug>(EasyAlign)
-  " nmap ga <Plug>(EasyAlign)
+  " call SpaceVim#custom#SPCGroupName(['A'], '+Vim-easy-align')
+  " call SpaceVim#custom#SPC('xmap', ['A', 'v'], 'EasyAlign', 'start-interactive-easy-align-in-visual-mode',1)
+  " call SpaceVim#custom#SPC('nmap', ['A', 'a'], 'EasyAlign', 'start-interactive-easy-align-for-a-motion-or-text-object',1)
+  xmap ga <Plug>(EasyAlign)
+  nmap ga <Plug>(EasyAlign)
 endfunction
