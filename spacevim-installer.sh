@@ -69,9 +69,9 @@ if ! command -- $(which yarn) --version > /dev/null 2>&1; then
   fi
 fi
 
-python3 -m pip install --user -U pynvim
-python2 -m pip install --user -U pynvim
-sudo npm -g install neovim
+$(which python3) -m pip install --user -U pynvim
+$(which python2) -m pip install --user -U pynvim
+sudo $(which npm) -g install neovim
 ### yes | sudo perl -MCPAN -e 'upgrade'
 # sudo cpanm -n -S -f -q Neovim::Ext
 #
@@ -98,7 +98,7 @@ mkdir -p ~/.config/coc/extensions
 echo '{"dependencies":{}}'> ~/.config/coc/extensions/package.json
 IFS=' ' read -a coc_packages <<< $(nvim --headless -c 'for plugin in g:coc_global_extensions | echon plugin " " | endfor' -c 'silent write >> /dev/stdout' -c 'quitall' 2>&1)
 if [ ${#coc_packages[@]} -ne 0  ];then
-  yarn add --cwd ~/.config/coc/extensions --frozen-lockfile --ignore-engines "${coc_packages[@]}"
+  $(which yarn) add --cwd ~/.config/coc/extensions --frozen-lockfile --ignore-engines "${coc_packages[@]}"
 fi
 #
 # ─── POTENTIAL FIX FOR SOME DEOPLETE BUGS ───────────────────────────────────────
@@ -114,7 +114,7 @@ fi
 mv "$HOME/.SpaceVim/autoload/SpaceVim/plugins.vim.bak" "$HOME/.SpaceVim/autoload/SpaceVim/plugins.vim"
 # ────────────────────────────────────────────────────────────────────────────────
 echo >&2 "*** installing NPM packages required by SpaceVim."
-sudo yarn --silent global add --prefix /usr/local \
+sudo $(which yarn) --silent global add --prefix /usr/local \
   markdown-magic \
   remark \
   remark-cli \
@@ -127,7 +127,7 @@ sudo yarn --silent global add --prefix /usr/local \
   standard-readme-spec
 # ────────────────────────────────────────────────────────────────────────────────
 echo >&2 "*** installing pip packages required by SpaceVim."
-python3 -m pip install --user notedown
+$(which python3) -m pip install --user notedown
 
 # https://raw.githubusercontent.com/arthurnavah/environment/master/update.sh
 nvim --headless \
