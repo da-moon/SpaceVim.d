@@ -98,7 +98,7 @@ mkdir -p ~/.config/coc/extensions
 echo '{"dependencies":{}}'> ~/.config/coc/extensions/package.json
 IFS=' ' read -a coc_packages <<< $(nvim --headless -c 'for plugin in g:coc_global_extensions | echon plugin " " | endfor' -c 'silent write >> /dev/stdout' -c 'quitall' 2>&1)
 if [ ${#coc_packages[@]} -ne 0  ];then
-  $(which yarn) add --cwd ~/.config/coc/extensions --frozen-lockfile --ignore-engines "${coc_packages[@]}"
+  $(which node) $(which yarn) add --cwd ~/.config/coc/extensions --frozen-lockfile --ignore-engines "${coc_packages[@]}"
 fi
 #
 # ─── POTENTIAL FIX FOR SOME DEOPLETE BUGS ───────────────────────────────────────
@@ -114,7 +114,7 @@ fi
 mv "$HOME/.SpaceVim/autoload/SpaceVim/plugins.vim.bak" "$HOME/.SpaceVim/autoload/SpaceVim/plugins.vim"
 # ────────────────────────────────────────────────────────────────────────────────
 echo >&2 "*** installing NPM packages required by SpaceVim."
-sudo $(which yarn) --silent global add --prefix /usr/local \
+sudo $(which node) $(which yarn) --silent global add --prefix /usr/local \
   markdown-magic \
   remark \
   remark-cli \
