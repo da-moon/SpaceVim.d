@@ -71,7 +71,7 @@ fi
 
 $(which python3) -m pip install --user -U pynvim
 $(which python2) -m pip install --user -U pynvim
-sudo $(which npm) -g install neovim
+sudo $(which node) $(which npm) -g install neovim
 ### yes | sudo perl -MCPAN -e 'upgrade'
 # sudo cpanm -n -S -f -q Neovim::Ext
 #
