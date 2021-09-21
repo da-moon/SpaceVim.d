@@ -55,10 +55,8 @@ if command -- $(which apt-get) --version > /dev/null 2>&1 ; then
   [ -z "$((dpkg-query -W --showformat='${Status}\n' gawk 2>&1 || true )|(grep "install ok installed" || true))" ] && sudo apt-get update -qq && sudo apt-get install gawk -yqq
 fi
 
-! command -- $(which pip3) --version > /dev/null 2>&1 && (curl -fsSl https://bootstrap.pypa.io/get-pip.py | sudo $(which python3))
-if ! command -- $(which pip) --version > /dev/null 2>&1 ; then
-  "$(which python2)" --version > /dev/null 2>&1 && curl -fsSl https://bootstrap.pypa.io/pip/$($(which python2) --version 2>&1 | gawk 'BEGIN{FS=OFS="."}{gsub("[^[:digit:].]*","");print $1,$2}')/get-pip.py | sudo $(which python2)
-fi
+! command -- $(which python3) -m pip --version > /dev/null 2>&1 && (curl -fsSl https://bootstrap.pypa.io/get-pip.py | sudo $(which python3))
+! command -- $(which python2) -m pip --version > /dev/null 2>&1 && curl -fsSl https://bootstrap.pypa.io/pip/$($(which python2) --version 2>&1 | gawk 'BEGIN{FS=OFS="."}{gsub("[^[:digit:].]*","");print $1,$2}')/get-pip.py | sudo $(which python2)
 ! command -- $(which npm) --version > /dev/null 2>&1 && (curl -fsSL install-node.vercel.app | sudo bash -s -- --yes --verbose --prefix=/usr/local)
 if ! command -- $(which yarn) --version > /dev/null 2>&1; then
   command -- $(which pacman) --version > /dev/null 2>&1 && sudo pacman -S --noconfirm yarn
