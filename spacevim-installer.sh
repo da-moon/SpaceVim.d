@@ -66,7 +66,8 @@ if ! command -- $(which yarn) --version > /dev/null 2>&1; then
     sudo apt-get -qq update && sudo apt-get -yqq install yarn
   fi
 fi
-
+sudo chmod a+x $(which npm) ;
+sudo chmod a+x $(which yarn) ;
 $(which python3) -m pip install --user -U pynvim
 $(which python2) -m pip install --user -U pynvim
 sudo $(which node) $(which npm) -g install neovim
@@ -96,7 +97,8 @@ mkdir -p ~/.config/coc/extensions
 echo '{"dependencies":{}}'> ~/.config/coc/extensions/package.json
 IFS=' ' read -a coc_packages <<< $(nvim --headless -c 'for plugin in g:coc_global_extensions | echon plugin " " | endfor' -c 'silent write >> /dev/stdout' -c 'quitall' 2>&1)
 if [ ${#coc_packages[@]} -ne 0  ];then
-  $(which node) $(which yarn) add --cwd ~/.config/coc/extensions --frozen-lockfile --ignore-engines "${coc_packages[@]}"
+  $(which yarn) add --cwd ~/.config/coc/extensions --frozen-lockfile --ignore-engines "${coc_packages[@]}" \
+  || $(which node) $(which yarn) add --cwd ~/.config/coc/extensions --frozen-lockfile --ignore-engines "${coc_packages[@]}"
 fi
 #
 # ─── POTENTIAL FIX FOR SOME DEOPLETE BUGS ───────────────────────────────────────
@@ -112,17 +114,21 @@ fi
 mv "$HOME/.SpaceVim/autoload/SpaceVim/plugins.vim.bak" "$HOME/.SpaceVim/autoload/SpaceVim/plugins.vim"
 # ────────────────────────────────────────────────────────────────────────────────
 echo >&2 "*** installing NPM packages required by SpaceVim."
-sudo $(which node) $(which yarn) --silent global add --prefix /usr/local \
-  markdown-magic \
-  remark \
-  remark-cli \
-  remark-stringify \
-  remark-frontmatter \
-  wcwidth \
-  prettier \
-  bash-language-server \
-  dockerfile-language-server-nodejs \
-  standard-readme-spec
+YARN_GLOBAL_PACKAGES=(
+  "markdown-magic"
+  "remark"
+  "remark-cli"
+  "remark-stringify"
+  "remark-frontmatter"
+  "wcwidth"
+  "prettier"
+  "bash-language-server"
+  "dockerfile-language-server-nodejs"
+  "standard-readme-spec"
+)
+sudo $(which yarn) --silent global add --prefix /usr/local "${YARN_GLOBAL_PACKAGES[@]}" \
+|| sudo $(which node) $(which yarn) --silent global add --prefix /usr/local "${YARN_GLOBAL_PACKAGES[@]}"
+
 # ────────────────────────────────────────────────────────────────────────────────
 echo >&2 "*** installing pip packages required by SpaceVim."
 $(which python3) -m pip install --user notedown
