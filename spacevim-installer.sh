@@ -122,12 +122,8 @@ mkdir -p ~/.config/coc/extensions
 echo '{"dependencies":{}}'> ~/.config/coc/extensions/package.json
 IFS=' ' read -a coc_packages <<< $(nvim --headless -c 'for plugin in g:coc_global_extensions | echon plugin " " | endfor' -c 'silent write >> /dev/stdout' -c 'quitall' 2>&1)
 if [ ${#coc_packages[@]} -ne 0  ];then
-<<<<<<< HEAD
   yarn add --cwd ~/.config/coc/extensions --frozen-lockfile --ignore-engines "${coc_packages[@]}" \
   || $(which yarn) add --cwd ~/.config/coc/extensions --frozen-lockfile --ignore-engines "${coc_packages[@]}" \
-=======
-  $(which yarn) add --cwd ~/.config/coc/extensions --frozen-lockfile --ignore-engines "${coc_packages[@]}" \
->>>>>>> c94acf2b3588c5c991eedd37e6dda7de84a34c3b
   || $(which node) $(which yarn) add --cwd ~/.config/coc/extensions --frozen-lockfile --ignore-engines "${coc_packages[@]}"
 fi
 
@@ -137,31 +133,6 @@ if command -- $(which apk) --version > /dev/null 2>&1 ; then
   nvim --headless -c "call dein#direct_install('jaxbot/github-issues.vim')" -c "qall"
 fi
 mv "$HOME/.SpaceVim/autoload/SpaceVim/plugins.vim.bak" "$HOME/.SpaceVim/autoload/SpaceVim/plugins.vim"
-<<<<<<< HEAD
-=======
-# ────────────────────────────────────────────────────────────────────────────────
-echo >&2 "*** installing NPM packages required by SpaceVim."
-YARN_GLOBAL_PACKAGES=(
-  "markdown-magic"
-  "remark"
-  "remark-cli"
-  "remark-stringify"
-  "remark-frontmatter"
-  "wcwidth"
-  "prettier"
-  "bash-language-server"
-  "dockerfile-language-server-nodejs"
-  "standard-readme-spec"
-)
-sudo $(which yarn) --silent global add --prefix /usr/local "${YARN_GLOBAL_PACKAGES[@]}" \
-|| sudo $(which node) $(which yarn) --silent global add --prefix /usr/local "${YARN_GLOBAL_PACKAGES[@]}"
-
-# ────────────────────────────────────────────────────────────────────────────────
-echo >&2 "*** installing pip packages required by SpaceVim."
-$(which python3) -m pip install --user notedown
-
-# https://raw.githubusercontent.com/arthurnavah/environment/master/update.sh
->>>>>>> c94acf2b3588c5c991eedd37e6dda7de84a34c3b
 nvim --headless \
   -c "call dein#clear_state()" \
   -c "call dein#update()" \
