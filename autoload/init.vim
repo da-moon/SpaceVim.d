@@ -9,6 +9,7 @@ let g:spacevim_custom_plugins = [
   \ ['tarekbecker/vim-yaml-formatter'],
   \ ['machakann/vim-highlightedyank'],
   \ ['sheerun/vim-polyglot'],
+  \ ['metakirby5/codi.vim'],
 \ ]
 let g:spacevim_layers={
   \ 'colorscheme' : {},
