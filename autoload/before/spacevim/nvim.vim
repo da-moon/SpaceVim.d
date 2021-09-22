@@ -2,6 +2,10 @@ function! before#spacevim#nvim#bootstrap() abort
   call SpaceVim#logger#info("[ before#spacevim#nvim#bootstrap ] function called.")
   if has('nvim')
     autocmd VimEnter * silent! UpdateRemotePlugins
+    call SpaceVim#logger#info("[ before#spacevim#nvim#bootstrap ] disable Perl support")
+    let g:loaded_perl_provider = 0
+    call SpaceVim#logger#info("[ before#spacevim#nvim#bootstrap ] disable Ruby support")
+    let g:loaded_ruby_provider = 0
     call SpaceVim#logger#info("[ before#spacevim#nvim#bootstrap ] display result of incremental commands (ex. :%s/pat1/pat2/g) ")
     set inccommand=split
     call SpaceVim#logger#info("[ before#spacevim#nvim#bootstrap ] enter terminal buffer in Insert instead of Normal mode")
