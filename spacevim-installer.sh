@@ -21,6 +21,7 @@ if command -- $(which apt-get) --version > /dev/null 2>&1 ; then
   [ -n "$((dpkg-query -W --showformat='${Status}\n' python3-pip 2>&1 || true )|(grep "install ok installed" || true))" ] && sudo apt-get remove --purge -yqq python3-pip
   [ -n "$((dpkg-query -W --showformat='${Status}\n' python-pip 2>&1 || true )|(grep "install ok installed" || true))" ] && sudo apt-get remove --purge -yqq python-pip
 fi
+# TODO change this to npm
 if command -- $(which yarn) --version > /dev/null 2>&1 ; then
   sudo $(which yarn) global remove neovim  >/dev/null 2>&1  || true
 fi
@@ -29,16 +30,6 @@ if (command -v perl && command -v cpanm) >/dev/null 2>&1; then
   cpanm --local-lib=~/perl5 local::lib && eval $(perl -I ~/perl5/lib/perl5/ -Mlocal::lib)
   cpanm -f -q --uninstall Neovim::Ext > /dev/null 2>&1 || true
 fi
-echo >&2 "*** cleaning up neovim leftover directories."
-sudo /bin/rm -rf \
-    ~/.SpaceVim \
-    ~/.vim* \
-    ~/.config/coc \
-    ~/.config/*vim* \
-    ~/.cache/*vim* \
-    ~/.cache/SpaceVim \
-    ~/.cache/neosnippet \
-    ~/.local/share/*vim*
 #
 # ─── PROVIDER INSTALLATION ──────────────────────────────────────────────────────
 #
@@ -66,20 +57,56 @@ if ! command -- $(which yarn) --version > /dev/null 2>&1; then
     sudo apt-get -qq update && sudo apt-get -yqq install yarn
   fi
 fi
-
+sudo chmod a+x $(which npm) ;
+sudo chmod a+x $(which yarn) ;
 $(which python3) -m pip install --user -U pynvim
 $(which python2) -m pip install --user -U pynvim
-sudo $(which node) $(which npm) -g install neovim
+sudo npm -g install neovim \
+|| sudo $(which npm) -g install neovim \
+|| sudo $(which node) $(which npm) -g install neovim
 ### yes | sudo perl -MCPAN -e 'upgrade'
 # sudo cpanm -n -S -f -q Neovim::Ext
+# ────────────────────────────────────────────────────────────────────────────────
+echo >&2 "*** installing NPM packages required by SpaceVim."
+YARN_GLOBAL_PACKAGES=(
+  "markdown-magic"
+  "remark"
+  "remark-cli"
+  "remark-stringify"
+  "remark-frontmatter"
+  "wcwidth"
+  "prettier"
+  "bash-language-server"
+  "dockerfile-language-server-nodejs"
+  "standard-readme-spec"
+)
+sudo yarn --silent global add --prefix /usr/local "${YARN_GLOBAL_PACKAGES[@]}" \
+|| sudo $(which yarn) --silent global add --prefix /usr/local "${YARN_GLOBAL_PACKAGES[@]}" \
+|| sudo $(which node) $(which yarn) --silent global add --prefix /usr/local "${YARN_GLOBAL_PACKAGES[@]}"
+
+# ────────────────────────────────────────────────────────────────────────────────
+
+echo >&2 "*** installing pip packages required by SpaceVim."
+$(which python3) -m pip install --user notedown
+
 #
-# ─── SPACEVIM INITIAL SETUP ─────────────────────────────────────────────────────
+# ─── SPACEVIM ───────────────────────────────────────────────────────────────────
 #
-echo >&2 "*** installing SpaceVim."
+sudo /bin/rm -rf \
+    ~/.SpaceVim \
+    ~/.vim* \
+    ~/.config/coc \
+    ~/.config/*vim* \
+    ~/.cache/*vim* \
+    ~/.cache/SpaceVim \
+    ~/.cache/neosnippet \
+    ~/.local/share/*vim*
+
 curl -sLf https://spacevim.org/install.sh | bash
 sed -i.bak 's/call dein#add/"call dein#add/g' "$HOME/.SpaceVim/autoload/SpaceVim/plugins.vim"
 mkdir -p "$HOME/.local/share/nvim/shada"
 # [ NOTE ] => https://herringtondarkholme.github.io/2016/02/26/dein/
+
 nvim --headless \
  -c ":echon \"\\n\\n######\\tInstalling core plugins ...\\t#####\\n\\n\"" \
  -c "call dein#direct_install('neoclide/coc.nvim', { 'merged': 0,'rev': 'release'})" \
@@ -88,54 +115,32 @@ nvim --headless \
  -c "call dein#direct_install('iamcco/markdown-preview.nvim', {'on_ft': ['markdown', 'pandoc.markdown', 'rmd'],'build': 'yarn --cwd app --frozen-lockfile install' })" \
  -c "call dein#direct_install('lymslive/vimloo', { 'merged': '0' })" \
  -c "call dein#direct_install('lymslive/vnote', { 'depends': 'vimloo' })" \
+ -c "call dein#direct_install('tyru/open-browser.vim')" \
+ -c "call dein#direct_install('tyru/open-browser-github.vim', { 'depends': 'open-browser.vim' })" \
  -c "qall"
-#
-# ─── COC SETUP ──────────────────────────────────────────────────────────────────
-#
 mkdir -p ~/.config/coc/extensions
 echo '{"dependencies":{}}'> ~/.config/coc/extensions/package.json
 IFS=' ' read -a coc_packages <<< $(nvim --headless -c 'for plugin in g:coc_global_extensions | echon plugin " " | endfor' -c 'silent write >> /dev/stdout' -c 'quitall' 2>&1)
 if [ ${#coc_packages[@]} -ne 0  ];then
-  $(which node) $(which yarn) add --cwd ~/.config/coc/extensions --frozen-lockfile --ignore-engines "${coc_packages[@]}"
+  yarn add --cwd ~/.config/coc/extensions --frozen-lockfile --ignore-engines "${coc_packages[@]}" \
+  || $(which yarn) add --cwd ~/.config/coc/extensions --frozen-lockfile --ignore-engines "${coc_packages[@]}" \
+  || $(which node) $(which yarn) add --cwd ~/.config/coc/extensions --frozen-lockfile --ignore-engines "${coc_packages[@]}"
 fi
-#
-# ─── POTENTIAL FIX FOR SOME DEOPLETE BUGS ───────────────────────────────────────
-#
-if [ -r "$HOME/.cache/vimfiles/repos/github.com/zchee/deoplete-go/rplugin/python3/deoplete/sources/deoplete_go.py" ]; then
-sed -i \
-   -e '/def gather_candidates/a\        return []' \
-   -e '/def get_complete_result/a\        return []' \
-   -e '/def find_gocode_binary/a\        return "/bin/true"' \
-"$HOME/.cache/vimfiles/repos/github.com/zchee/deoplete-go/rplugin/python3/deoplete/sources/deoplete_go.py"
-echo 'finish' >  "$HOME/.cache/vimfiles/repos/github.com/zchee/deoplete-go/plugin/deoplete-go.vim"
+
+# [ NOTE ] => directly install plugins to prevent segfault on Alpine
+if command -- $(which apk) --version > /dev/null 2>&1 ; then
+  nvim --headless -c "call dein#direct_install('davidhalter/jedi-vim')" -c "qall"
+  nvim --headless -c "call dein#direct_install('jaxbot/github-issues.vim')" -c "qall"
 fi
 mv "$HOME/.SpaceVim/autoload/SpaceVim/plugins.vim.bak" "$HOME/.SpaceVim/autoload/SpaceVim/plugins.vim"
-# ────────────────────────────────────────────────────────────────────────────────
-echo >&2 "*** installing NPM packages required by SpaceVim."
-sudo $(which node) $(which yarn) --silent global add --prefix /usr/local \
-  markdown-magic \
-  remark \
-  remark-cli \
-  remark-stringify \
-  remark-frontmatter \
-  wcwidth \
-  prettier \
-  bash-language-server \
-  dockerfile-language-server-nodejs \
-  standard-readme-spec
-# ────────────────────────────────────────────────────────────────────────────────
-echo >&2 "*** installing pip packages required by SpaceVim."
-$(which python3) -m pip install --user notedown
-
-# https://raw.githubusercontent.com/arthurnavah/environment/master/update.sh
 nvim --headless \
- -c "call dein#clear_state()" \
- -c "call dein#update()" \
- -c "call dein#recache_runtimepath()" \
- -c "call dein#remote_plugins()" \
- -c "UpdateRemotePlugins" \
- -c "call dein#save_state()" \
- -c "qall"
+  -c "call dein#clear_state()" \
+  -c "call dein#update()" \
+  -c "call dein#recache_runtimepath()" \
+  -c "call dein#remote_plugins()" \
+  -c "UpdateRemotePlugins" \
+  -c "call dein#save_state()" \
+  -c "qall"
 [ -d "${HOME}/.SpaceVim/bundle/vimproc.vim" ] && make -C ~/.SpaceVim/bundle/vimproc.vim ; 
 healthcheck=$(timeout 10 nvim --headless -c 'checkhealth' -c 'silent write >> /dev/stdout' -c 'quitall' 2>&1 || true )
 echo "${healthcheck}" | grep -v 'perl' | grep -q ERROR && ( echo '########### healthcheck error ###########' ; echo "${healthcheck}" )
