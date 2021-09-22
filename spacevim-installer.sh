@@ -142,5 +142,5 @@ nvim --headless \
   -c "call dein#save_state()" \
   -c "qall"
 [ -d "${HOME}/.SpaceVim/bundle/vimproc.vim" ] && make -C ~/.SpaceVim/bundle/vimproc.vim ; 
-healthcheck=$(timeout 10 nvim --headless -c 'checkhealth' -c 'silent write >> /dev/stdout' -c 'quitall' 2>&1 || true )
-echo "${healthcheck}" | grep -v 'perl' | grep -q ERROR && ( echo '########### healthcheck error ###########' ; echo "${healthcheck}" )
+# healthcheck=$(timeout 10 nvim --headless -c 'checkhealth' -c 'silent write >> /dev/stdout' -c 'quitall' 2>&1 || true )
+# echo "${healthcheck}" | grep -v 'perl' | grep -q ERROR && ( echo '########### healthcheck error ###########' ; echo "${healthcheck}" )
