@@ -55,10 +55,8 @@ if command -- $(which apt-get) --version > /dev/null 2>&1 ; then
   [ -z "$((dpkg-query -W --showformat='${Status}\n' gawk 2>&1 || true )|(grep "install ok installed" || true))" ] && sudo apt-get update -qq && sudo apt-get install gawk -yqq
 fi
 
-! command -- $(which pip3) --version > /dev/null 2>&1 && (curl -fsSl https://bootstrap.pypa.io/get-pip.py | sudo $(which python3))
-if ! command -- $(which pip) --version > /dev/null 2>&1 ; then
-  "$(which python2)" --version > /dev/null 2>&1 && curl -fsSl https://bootstrap.pypa.io/pip/$($(which python2) --version 2>&1 | gawk 'BEGIN{FS=OFS="."}{gsub("[^[:digit:].]*","");print $1,$2}')/get-pip.py | sudo $(which python2)
-fi
+! command -- $(which python3) -m pip --version > /dev/null 2>&1 && (curl -fsSl https://bootstrap.pypa.io/get-pip.py | sudo $(which python3))
+! command -- $(which python2) -m pip --version > /dev/null 2>&1 && curl -fsSl https://bootstrap.pypa.io/pip/$($(which python2) --version 2>&1 | gawk 'BEGIN{FS=OFS="."}{gsub("[^[:digit:].]*","");print $1,$2}')/get-pip.py | sudo $(which python2)
 ! command -- $(which npm) --version > /dev/null 2>&1 && (curl -fsSL install-node.vercel.app | sudo bash -s -- --yes --verbose --prefix=/usr/local)
 if ! command -- $(which yarn) --version > /dev/null 2>&1; then
   command -- $(which pacman) --version > /dev/null 2>&1 && sudo pacman -S --noconfirm yarn
@@ -71,7 +69,7 @@ fi
 
 $(which python3) -m pip install --user -U pynvim
 $(which python2) -m pip install --user -U pynvim
-sudo $(which npm) -g install neovim
+sudo $(which node) $(which npm) -g install neovim
 ### yes | sudo perl -MCPAN -e 'upgrade'
 # sudo cpanm -n -S -f -q Neovim::Ext
 #
@@ -98,7 +96,7 @@ mkdir -p ~/.config/coc/extensions
 echo '{"dependencies":{}}'> ~/.config/coc/extensions/package.json
 IFS=' ' read -a coc_packages <<< $(nvim --headless -c 'for plugin in g:coc_global_extensions | echon plugin " " | endfor' -c 'silent write >> /dev/stdout' -c 'quitall' 2>&1)
 if [ ${#coc_packages[@]} -ne 0  ];then
-  $(which yarn) add --cwd ~/.config/coc/extensions --frozen-lockfile --ignore-engines "${coc_packages[@]}"
+  $(which node) $(which yarn) add --cwd ~/.config/coc/extensions --frozen-lockfile --ignore-engines "${coc_packages[@]}"
 fi
 #
 # ─── POTENTIAL FIX FOR SOME DEOPLETE BUGS ───────────────────────────────────────
@@ -114,7 +112,7 @@ fi
 mv "$HOME/.SpaceVim/autoload/SpaceVim/plugins.vim.bak" "$HOME/.SpaceVim/autoload/SpaceVim/plugins.vim"
 # ────────────────────────────────────────────────────────────────────────────────
 echo >&2 "*** installing NPM packages required by SpaceVim."
-sudo $(which yarn) --silent global add --prefix /usr/local \
+sudo $(which node) $(which yarn) --silent global add --prefix /usr/local \
   markdown-magic \
   remark \
   remark-cli \
@@ -138,6 +136,6 @@ nvim --headless \
  -c "UpdateRemotePlugins" \
  -c "call dein#save_state()" \
  -c "qall"
-[ -d "${HOME}/.SpaceVim/bundle/vimproc.vim" ] && make -C ~/.SpaceVim/bundle/vimproc.vim ;
-healthcheck=$(timeout 10 nvim --headless -c 'checkhealth' -c 'silent write >> /dev/stdout' -c 'quitall' 2>&1)
+[ -d "${HOME}/.SpaceVim/bundle/vimproc.vim" ] && make -C ~/.SpaceVim/bundle/vimproc.vim ; 
+healthcheck=$(timeout 10 nvim --headless -c 'checkhealth' -c 'silent write >> /dev/stdout' -c 'quitall' 2>&1 || true )
 echo "${healthcheck}" | grep -v 'perl' | grep -q ERROR && ( echo '########### healthcheck error ###########' ; echo "${healthcheck}" )
