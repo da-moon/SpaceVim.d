@@ -32,7 +32,7 @@ let g:coc_global_extensions = [
   \ 'coc-tasks',
 \]
 if system("uname -m") != "aarch64\n"
-    call add(g:coc_filetypes,'coc-tabnine')
+    call add(g:coc_global_extensions,'coc-tabnine')
 endif
 let g:coc_preferences = {
   \ 'autoTrigger': 'always',

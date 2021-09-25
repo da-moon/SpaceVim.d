@@ -108,34 +108,34 @@ mkdir -p "$HOME/.local/share/nvim/shada"
 # [ NOTE ] => https://herringtondarkholme.github.io/2016/02/26/dein/
 
 nvim --headless \
- -c ":echon \"\\n\\n######\\tInstalling core plugins ...\\t#####\\n\\n\"" \
- -c "call dein#direct_install('neoclide/coc.nvim', { 'merged': 0,'rev': 'release'})" \
- -c "call dein#direct_install('deoplete-plugins/deoplete-go', { 'build': 'make','hook_post_update': ':UpdateRemotePlugins'})" \
- -c "call dein#direct_install('Shougo/vimproc.vim', { 'build': 'make' })" \
- -c "call dein#direct_install('iamcco/markdown-preview.nvim', {'on_ft': ['markdown', 'pandoc.markdown', 'rmd'],'build': 'yarn --cwd app --frozen-lockfile install' })" \
- -c "call dein#direct_install('lymslive/vimloo', { 'merged': '0' })" \
- -c "call dein#direct_install('lymslive/vnote', { 'depends': 'vimloo' })" \
- -c "call dein#direct_install('tyru/open-browser.vim')" \
- -c "call dein#direct_install('tyru/open-browser-github.vim', { 'depends': 'open-browser.vim' })" \
- -c "qall" ;
+  -c ":echon \"\\n\\n######\\tInstalling core plugins ...\\t#####\\n\\n\"" \
+  -c "call dein#direct_install('deoplete-plugins/deoplete-go', { 'build': 'make','hook_post_update': ':UpdateRemotePlugins'})" \
+  -c "call dein#direct_install('neoclide/coc.nvim', { 'merged': 0,'build':'yarn install --frozen-lockfile'})" \
+  -c "call dein#direct_install('Shougo/vimproc.vim', { 'build': 'make' })" \
+  -c "call dein#direct_install('iamcco/markdown-preview.nvim', {'on_ft': ['markdown', 'pandoc.markdown', 'rmd'],'build': 'yarn --cwd app --frozen-lockfile install' })" \
+  -c "call dein#direct_install('lymslive/vimloo', { 'merged': '0' })" \
+  -c "call dein#direct_install('lymslive/vnote', { 'depends': 'vimloo' })" \
+  -c "call dein#direct_install('tyru/open-browser.vim')" \
+  -c "call dein#direct_install('tyru/open-browser-github.vim', { 'depends': 'open-browser.vim' })" \
+  -c "qall" ;
 
 mkdir -p ~/.config/coc/extensions
 echo '{"dependencies":{}}'> ~/.config/coc/extensions/package.json
 IFS=' ' read -a coc_packages <<< $(nvim --headless -c 'for plugin in g:coc_global_extensions | echon plugin " " | endfor' -c 'silent write >> /dev/stdout' -c 'quitall' 2>&1)
 if [ ${#coc_packages[@]} -ne 0  ];then
-#   # yarn add --cwd ~/.config/coc/extensions --frozen-lockfile --ignore-engines "${coc_packages[@]}" \
-#   # || $(which yarn) add --cwd ~/.config/coc/extensions --frozen-lockfile --ignore-engines "${coc_packages[@]}" \
-#   # || $(which node) $(which yarn) add --cwd ~/.config/coc/extensions --frozen-lockfile --ignore-engines "${coc_packages[@]}"
+  # yarn add --cwd ~/.config/coc/extensions --frozen-lockfile --ignore-engines "${coc_packages[@]}" \
+  # || $(which yarn) add --cwd ~/.config/coc/extensions --frozen-lockfile --ignore-engines "${coc_packages[@]}" \
+  # || $(which node) $(which yarn) add --cwd ~/.config/coc/extensions --frozen-lockfile --ignore-engines "${coc_packages[@]}"
   npm install --prefix "${HOME}/.config/coc/extensions" --global-style --ignore-scripts --no-bin-links --no-package-lock --only=prod "${coc_packages[@]}" \
   || $(which npm) install --prefix "${HOME}/.config/coc/extensions" --global-style --ignore-scripts --no-bin-links --no-package-lock --only=prod "${coc_packages[@]}" \
   || $(which node) $(which npm) install --prefix "${HOME}/.config/coc/extensions" --global-style --ignore-scripts --no-bin-links --no-package-lock --only=prod "${coc_packages[@]}"
 fi
 
 # [ NOTE ] => directly install plugins to prevent segfault on Alpine
-if command -- $(which apk) --version > /dev/null 2>&1 ; then
-  nvim --headless -c "call dein#direct_install('davidhalter/jedi-vim')" -c "qall"
-  nvim --headless -c "call dein#direct_install('jaxbot/github-issues.vim')" -c "qall"
-fi
+# if command -- $(which apk) --version > /dev/null 2>&1 ; then
+nvim --headless -c "call dein#direct_install('davidhalter/jedi-vim')" -c "qall"
+nvim --headless -c "call dein#direct_install('jaxbot/github-issues.vim')" -c "qall"
+# fi
 mv "$HOME/.SpaceVim/autoload/SpaceVim/plugins.vim.bak" "$HOME/.SpaceVim/autoload/SpaceVim/plugins.vim"
 nvim --headless \
   -c "call dein#clear_state()" \
