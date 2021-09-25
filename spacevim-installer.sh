@@ -6,23 +6,23 @@ set -xeuo pipefail
 # ─── CLEAN UPS ──────────────────────────────────────────────────────────────────
 #
 
-if command -- $(which pip3) --version > /dev/null 2>&1 ; then
+if command -- $(which pip3 2>/dev/null) --version > /dev/null 2>&1 ; then
   echo >&2 "*** ensuring all existing neovim related python packages are removed."
   sudo $(which python3) -m pip uninstall -yq neovim pynvim msgpack greenlet >/dev/null 2>&1  || true
   $(which python3) -m pip uninstall -yq neovim pynvim msgpack greenlet >/dev/null 2>&1  || true
 fi
-if command -- $(which pacman) --version > /dev/null 2>&1 ; then
+if command -- $(which pacman 2>/dev/null) --version > /dev/null 2>&1 ; then
   pacman -Qi python-pynvim > /dev/null 2>&1 && sudo pacman -Rcns --noconfirm python-pynvim
   pacman -Qi python-pip > /dev/null 2>&1 && sudo pacman -Rcns --noconfirm python-pip
   pacman -Qi python2-pip > /dev/null 2>&1 && sudo pacman -Rcns --noconfirm python2-pip
 fi
-if command -- $(which apt-get) --version > /dev/null 2>&1 ; then
+if command -- $(which apt-get 2>/dev/null) --version > /dev/null 2>&1 ; then
   [ -n "$((dpkg-query -W --showformat='${Status}\n' python3-neovim 2>&1 || true )|(grep "install ok installed" || true))" ] && sudo apt-get remove --purge -yqq python3-neovim
   [ -n "$((dpkg-query -W --showformat='${Status}\n' python3-pip 2>&1 || true )|(grep "install ok installed" || true))" ] && sudo apt-get remove --purge -yqq python3-pip
   [ -n "$((dpkg-query -W --showformat='${Status}\n' python-pip 2>&1 || true )|(grep "install ok installed" || true))" ] && sudo apt-get remove --purge -yqq python-pip
 fi
 # TODO change this to npm
-if command -- $(which yarn) --version > /dev/null 2>&1 ; then
+if command -- $(which yarn 2>/dev/null) --version > /dev/null 2>&1 ; then
   sudo $(which yarn) global remove neovim  >/dev/null 2>&1  || true
 fi
 if (command -v perl && command -v cpanm) >/dev/null 2>&1; then
@@ -33,25 +33,25 @@ fi
 #
 # ─── PROVIDER INSTALLATION ──────────────────────────────────────────────────────
 #
-if command -- $(which pacman) --version > /dev/null 2>&1 ; then
+if command -- $(which pacman 2>/dev/null) --version > /dev/null 2>&1 ; then
   ! pacman -Qi cpanminus > /dev/null 2>&1 && sudo pacman -Sy --noconfirm cpanminus
 fi
-if command -- $(which apt-get) --version > /dev/null 2>&1 ; then
+if command -- $(which apt-get 2>/dev/null) --version > /dev/null 2>&1 ; then
     [ -z "$((dpkg-query -W --showformat='${Status}\n' cpanminus 2>&1 || true )|(grep "install ok installed" || true))" ] && sudo apt-get update -qq && sudo apt-get install cpanminus -yqq
 fi
-if command -- $(which pacman) --version > /dev/null 2>&1 ; then
+if command -- $(which pacman 2>/dev/null) --version > /dev/null 2>&1 ; then
   ! pacman -Qi gawk > /dev/null 2>&1 && sudo pacman -Sy --noconfirm gawk
 fi
-if command -- $(which apt-get) --version > /dev/null 2>&1 ; then
+if command -- $(which apt-get 2>/dev/null) --version > /dev/null 2>&1 ; then
   [ -z "$((dpkg-query -W --showformat='${Status}\n' gawk 2>&1 || true )|(grep "install ok installed" || true))" ] && sudo apt-get update -qq && sudo apt-get install gawk -yqq
 fi
 
 ! command -- $(which python3) -m pip --version > /dev/null 2>&1 && (curl -fsSl https://bootstrap.pypa.io/get-pip.py | sudo $(which python3))
 ! command -- $(which python2) -m pip --version > /dev/null 2>&1 && curl -fsSl https://bootstrap.pypa.io/pip/$($(which python2) --version 2>&1 | gawk 'BEGIN{FS=OFS="."}{gsub("[^[:digit:].]*","");print $1,$2}')/get-pip.py | sudo $(which python2)
-! command -- $(which npm) --version > /dev/null 2>&1 && (curl -fsSL install-node.vercel.app | sudo bash -s -- --yes --verbose --prefix=/usr/local)
-if ! command -- $(which yarn) --version > /dev/null 2>&1; then
-  command -- $(which pacman) --version > /dev/null 2>&1 && sudo pacman -S --noconfirm yarn
-  if command -- $(which apt-get) --version > /dev/null  2>&1; then
+! command -- $(which npm 2>/dev/null) --version > /dev/null 2>&1 && (curl -fsSL install-node.vercel.app | sudo bash -s -- --yes --verbose --prefix=/usr/local)
+if ! command -- $(which yarn 2>/dev/null) --version > /dev/null 2>&1; then
+  command -- $(which pacman 2>/dev/null) --version > /dev/null 2>&1 && sudo pacman -S --noconfirm yarn
+  if command -- $(which apt-get 2>/dev/null) --version > /dev/null  2>&1; then
     curl -fsSL https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
     echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list > /dev/null
     sudo apt-get -qq update && sudo apt-get -yqq install yarn
@@ -117,14 +117,18 @@ nvim --headless \
  -c "call dein#direct_install('lymslive/vnote', { 'depends': 'vimloo' })" \
  -c "call dein#direct_install('tyru/open-browser.vim')" \
  -c "call dein#direct_install('tyru/open-browser-github.vim', { 'depends': 'open-browser.vim' })" \
- -c "qall"
+ -c "qall" ;
+
 mkdir -p ~/.config/coc/extensions
 echo '{"dependencies":{}}'> ~/.config/coc/extensions/package.json
 IFS=' ' read -a coc_packages <<< $(nvim --headless -c 'for plugin in g:coc_global_extensions | echon plugin " " | endfor' -c 'silent write >> /dev/stdout' -c 'quitall' 2>&1)
 if [ ${#coc_packages[@]} -ne 0  ];then
-  yarn add --cwd ~/.config/coc/extensions --frozen-lockfile --ignore-engines "${coc_packages[@]}" \
-  || $(which yarn) add --cwd ~/.config/coc/extensions --frozen-lockfile --ignore-engines "${coc_packages[@]}" \
-  || $(which node) $(which yarn) add --cwd ~/.config/coc/extensions --frozen-lockfile --ignore-engines "${coc_packages[@]}"
+#   # yarn add --cwd ~/.config/coc/extensions --frozen-lockfile --ignore-engines "${coc_packages[@]}" \
+#   # || $(which yarn) add --cwd ~/.config/coc/extensions --frozen-lockfile --ignore-engines "${coc_packages[@]}" \
+#   # || $(which node) $(which yarn) add --cwd ~/.config/coc/extensions --frozen-lockfile --ignore-engines "${coc_packages[@]}"
+  npm install --prefix "${HOME}/.config/coc/extensions" --global-style --ignore-scripts --no-bin-links --no-package-lock --only=prod "${coc_packages[@]}" \
+  || $(which npm) install --prefix "${HOME}/.config/coc/extensions" --global-style --ignore-scripts --no-bin-links --no-package-lock --only=prod "${coc_packages[@]}" \
+  || $(which node) $(which npm) install --prefix "${HOME}/.config/coc/extensions" --global-style --ignore-scripts --no-bin-links --no-package-lock --only=prod "${coc_packages[@]}"
 fi
 
 # [ NOTE ] => directly install plugins to prevent segfault on Alpine
