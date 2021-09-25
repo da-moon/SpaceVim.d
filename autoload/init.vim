@@ -26,12 +26,14 @@ let g:spacevim_layers={
   " \ 'coc-grammarly',
 let g:coc_global_extensions = [
   \ 'coc-marketplace',
-  \ 'coc-tabnine',
   \ 'coc-todolist',
   \ 'coc-spell-checker',
   \ 'coc-cspell-dicts',
   \ 'coc-tasks',
 \]
+if system("uname -m") != "aarch64\n"
+    call add(g:coc_filetypes,'coc-tabnine')
+endif
 let g:coc_preferences = {
   \ 'autoTrigger': 'always',
   \ 'maxCompleteItemCount': 10,
