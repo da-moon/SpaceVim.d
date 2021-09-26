@@ -123,12 +123,14 @@ mkdir -p ~/.config/coc/extensions
 echo '{"dependencies":{}}'> ~/.config/coc/extensions/package.json
 IFS=' ' read -a coc_packages <<< $(nvim --headless -c 'for plugin in g:coc_global_extensions | echon plugin " " | endfor' -c 'silent write >> /dev/stdout' -c 'quitall' 2>&1)
 if [ ${#coc_packages[@]} -ne 0  ];then
+  echo >&2 "*** installing coc plugins: ${coc_packages[@]}"
   # yarn add --cwd ~/.config/coc/extensions --frozen-lockfile --ignore-engines "${coc_packages[@]}" \
   # || $(which yarn) add --cwd ~/.config/coc/extensions --frozen-lockfile --ignore-engines "${coc_packages[@]}" \
   # || $(which node) $(which yarn) add --cwd ~/.config/coc/extensions --frozen-lockfile --ignore-engines "${coc_packages[@]}"
   npm install --prefix "${HOME}/.config/coc/extensions" --global-style --ignore-scripts --no-bin-links --no-package-lock --only=prod "${coc_packages[@]}" \
   || $(which npm) install --prefix "${HOME}/.config/coc/extensions" --global-style --ignore-scripts --no-bin-links --no-package-lock --only=prod "${coc_packages[@]}" \
-  || $(which node) $(which npm) install --prefix "${HOME}/.config/coc/extensions" --global-style --ignore-scripts --no-bin-links --no-package-lock --only=prod "${coc_packages[@]}"
+  || $(which node) $(which npm) install --prefix "${HOME}/.config/coc/extensions" --global-style --ignore-scripts --no-bin-links --no-package-lock --only=prod "${coc_packages[@]}" \
+  || true
 fi
 
 # [ NOTE ] => directly install plugins to prevent segfault on Alpine
