@@ -68,7 +68,7 @@ function! before#spacevim#mapping#shift_arrow() abort
   imap <S-Right> <Esc>v<Right>
 endfunction
 
-function! before#spacevim#mapping#shift_arrow() abort
+function! before#spacevim#mapping#clipboard() abort
   call SpaceVim#logger#info("[ before#spacevim#mapping#clipboard ] function called.")
   call SpaceVim#logger#info("[ before#spacevim#mapping#clipboard ] mapping ctrl+c to copy selected text.")
   vmap <C-c> y<Esc>i

@@ -88,6 +88,7 @@ function! init#before() abort
   call before#lang#markdown#bootstrap()
   call before#lang#json#bootstrap()
   call before#lang#yaml#bootstrap()
+  call before#lang#terraform#bootstrap()
 " ─── LOAD AND CONFIGURE SPACEVIM LAYERS ─────────────────────────────────────────
   call before#layers#autocomplete#bootstrap()
   call before#layers#checkers#bootstrap()
