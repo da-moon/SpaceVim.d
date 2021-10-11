@@ -72,9 +72,12 @@ function! before#spacevim#mapping#clipboard() abort
   call SpaceVim#logger#info("[ before#spacevim#mapping#clipboard ] function called.")
   call SpaceVim#logger#info("[ before#spacevim#mapping#clipboard ] mapping ctrl+c to copy selected text.")
   vmap <C-c> y<Esc>i
-  call SpaceVim#logger#info("[ before#spacevim#mapping#clipboard ] mapping ctrl+x to paste selected text.")
+  call SpaceVim#logger#info("[ before#spacevim#mapping#clipboard ] mapping ctrl+x to cut selected text.")
   vmap <C-x> d<Esc>i
   call SpaceVim#logger#info("[ before#spacevim#mapping#clipboard ] mapping ctrl+v to paste text.")
+  " 'alt+v' switches to visal block
+  nnoremap <M-v> <C-v>
+  
   map <C-v> pi
   imap <C-v> <Esc>pi
 endfunction
