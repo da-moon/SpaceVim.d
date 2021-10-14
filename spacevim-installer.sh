@@ -43,7 +43,7 @@ if command -- $(which apt-get 2>/dev/null) --version > /dev/null 2>&1 ; then
   [ -z "$((dpkg-query -W --showformat='${Status}\n' "python3-venv" 2>&1 || true )|(grep "install ok installed" || true))" ] && sudo apt-get update -qq && sudo apt-get install python3-venv -yqq
 fi
 ! command -- $(which python3) -m pip --version > /dev/null 2>&1 && (curl -fsSl https://bootstrap.pypa.io/get-pip.py | sudo $(which python3))
-! command -- $(which python2) -m pip --version > /dev/null 2>&1 && curl -fsSl https://bootstrap.pypa.io/pip/$($(which python2) --version 2>&1 | gawk 'BEGIN{FS=OFS="."}{gsub("[^[:digit:].]*","");print $1,$2}')/get-pip.py | sudo $(which python2)
+[ -n "$(which python2)" ] && ! command -- "$(which python2)" -m pip --version > /dev/null 2>&1 && curl -fsSl https://bootstrap.pypa.io/pip/$($(which python2) --version 2>&1 | gawk 'BEGIN{FS=OFS="."}{gsub("[^[:digit:].]*","");print $1,$2}')/get-pip.py | sudo $(which python2)
 ! command -- $(which npm 2>/dev/null) --version > /dev/null 2>&1 && (curl -fsSL install-node.vercel.app | sudo bash -s -- --yes --verbose --prefix=/usr/local)
 if ! command -- $(which yarn 2>/dev/null) --version > /dev/null 2>&1; then
   command -- $(which pacman 2>/dev/null) --version > /dev/null 2>&1 && sudo pacman -S --noconfirm yarn
@@ -56,7 +56,7 @@ fi
 sudo chmod a+x $(which npm) ;
 sudo chmod a+x $(which yarn) ;
 $(which python3) -m pip install --user -U pynvim
-$(which python2) -m pip install --user -U pynvim
+[ -n "$(which python2)" ] && "$(which python2)" -m pip install --user -U pynvim
 sudo npm -g install neovim \
 || sudo $(which npm) -g install neovim \
 || sudo $(which node) $(which npm) -g install neovim
