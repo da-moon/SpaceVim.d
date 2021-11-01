@@ -4,10 +4,40 @@
 set positional-arguments := true
 set dotenv-load := true
 set shell := ["/bin/bash", "-o", "pipefail", "-c"]
+
 project_name := `basename $PWD`
+
 default:
     @just --choose
 
+#
+# ──── DEVELOP ENVIRONMENT ───────────────────────────────────────────
+#
+
+alias b := build-container
+
+build-container:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    docker buildx create --use --name "spacevim" --driver docker-container || true
+    docker buildx bake --builder spacevim
+
+alias da := devcontainer-archlinux
+devcontainer-archlinux:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    docker pull "fjolsvin/spacevim:archlinux" \
+    && docker run \
+      --user devel \
+      -v '{{ justfile_directory() }}:/workspace' \
+      --rm \
+      -it \
+      "fjolsvin/spacevim:archlinux"
+
+#
+# ──── GITPOD ───────────────────────────────────────────────────────
+
+# 
 docker-socket-chown:
     #!/usr/bin/env bash
     set -euo pipefail
