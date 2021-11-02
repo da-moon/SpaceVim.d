@@ -104,7 +104,7 @@ sudo /bin/rm -rf \
   "${HOME}/.cache/"*vim* \
   "${HOME}/.local/share/"*vim*
 # ─────────────────────────────────────────────────────────────────────
-curl -sLf "https://spacevim.org/install.sh" | sh
+curl -sLf "https://spacevim.org/install.sh" | bash
 # ────────────────────────────────────────────────────────────────────────────────
 
 [ -r "${HOME}/.SpaceVim/autoload/SpaceVim/plugins.vim" ] && sed -i.bak 's/call dein#add/"call dein#add/g' "${HOME}/.SpaceVim/autoload/SpaceVim/plugins.vim"
