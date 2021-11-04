@@ -21,3 +21,5 @@ set colorcolumn=80,125
 call SpaceVim#logger#info('Default to case insensitive searches.')
 set ignorecase
 set smartcase
+call SpaceVim#logger#info('read up until first 5 lines of a file for modeline')
+set modelines=5
