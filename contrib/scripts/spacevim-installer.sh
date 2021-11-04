@@ -147,19 +147,19 @@ fi
 
 [ -r "${HOME}/.SpaceVim/autoload/SpaceVim/plugins.vim.bak" ] \
 && mv "${HOME}/.SpaceVim/autoload/SpaceVim/plugins.vim.bak" "${HOME}/.SpaceVim/autoload/SpaceVim/plugins.vim"
-nvim --headless \
+timeout 120 nvim --headless \
   -c "call dein#clear_state()" \
   -c "call dein#update()" \
   -c "call dein#recache_runtimepath()" \
   -c "call dein#remote_plugins()" \
   -c "UpdateRemotePlugins" \
   -c "call dein#save_state()" \
-  -c "qall"
+  -c "qall" || true
 #
 # ──── PACKER ────────────────────────────────────────────────────────
 #
-nvim --headless -c 'autocmd User PackerComplete quitall' -c 'PackerSync'
-nvim --headless -c 'UpdateRemotePlugins' -c 'qall'
+timeout 120 nvim --headless -c 'autocmd User PackerComplete quitall' -c 'PackerSync' || true
+timeout 120 nvim --headless -c 'UpdateRemotePlugins' -c 'qall' || true
 [ -d "${HOME}/.SpaceVim/bundle/vimproc.vim" ] && make -C "${HOME}/.SpaceVim/bundle/vimproc.vim" ; 
 # ─────────────────────────────────────────────────────────────────────
 echo >&2 "*** installing NPM packages required by SpaceVim."
