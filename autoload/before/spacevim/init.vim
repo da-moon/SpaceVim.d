@@ -1,5 +1,8 @@
 let g:spacevim_custom_plugins = []
 let g:spacevim_layers={}
+" for built in LSP server
+let g:enabled_clients = ['vimls']
+" pre nvim-0.5
 let g:lsp_servers = {}
 let g:lsp_override_cmd={}
 " ─────────────────────────────────────────────────────────────────────

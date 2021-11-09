@@ -5,7 +5,6 @@ function! before#spacevim#filemanager#init#load() abort
   call SpaceVim#logger#info(l:base_log_msg.'function called.')
   " ─────────────────────────────────────────────────────────────────────
   if has('nvim')
-   " call before#spacevim#filemanager#defx#load()
    call before#spacevim#filemanager#chadtree#load()
   else
    call before#spacevim#filemanager#coc_explorer#load()

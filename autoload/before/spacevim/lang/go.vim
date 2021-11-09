@@ -12,6 +12,7 @@ function! before#spacevim#lang#go#load()
       call SpaceVim#logger#info(l:base_log_msg.'gopls executable detected')
       let g:lsp_servers['go']='gopls'
       let g:lsp_override_cmd['go']=['gopls', '-mode', 'stdio']
+      call add(g:enabled_clients,'gopls')
     endif
   endif
 endfunction

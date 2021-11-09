@@ -9,4 +9,7 @@ function! before#spacevim#lang#init#load()
   call before#spacevim#lang#ruby#load()
   call before#spacevim#lang#rust#load()
   call before#spacevim#lang#sh#load()
+  call before#spacevim#lang#terraform#load()
+  call before#spacevim#lang#yaml#load()
+  call before#spacevim#lang#json#load()
 endfunction

@@ -19,8 +19,9 @@ return packer.startup(function()
     use {'folke/tokyonight.nvim'}
     use { 'wbthomason/packer.nvim' }
     use { 
-        'nvim-treesitter/nvim-treesitter', 
-        run = ':TSUpdate' ,
+        'nvim-treesitter/nvim-treesitter',
+        requires = {'neovim/nvim-lspconfig'},
+        run = ':TSUpdate'
     }
     use { 
         'glacambre/firenvim', 
@@ -32,57 +33,57 @@ return packer.startup(function()
         'nvim-neorg/neorg',
         requires = {'nvim-lua/plenary.nvim'}
     }
-    use {
-        'nvim-telescope/telescope.nvim',
-        requires = {'nvim-lua/plenary.nvim'} 
-    }
-    -- [ TODO ] only load when dependencies are installed
-    use {
-        'cljoly/telescope-repo.nvim',
-        requires = {'nvim-telescope/telescope.nvim'},
-    }
-    use {
-        'nvim-telescope/telescope-symbols.nvim',
-        requires = {'nvim-telescope/telescope.nvim'},
-    }
-    use {
-        'AckslD/nvim-neoclip.lua',
-        requires = { 
-            {'tami5/sqlite.lua', module = 'sqlite'},
-            {'nvim-telescope/telescope.nvim'},
-        },
-        config = function()
-            require('neoclip').setup()
-        end,
-    }
-    use {
-        'nvim-telescope/telescope-media-files.nvim',
-        requires = {
-            {'nvim-telescope/telescope.nvim'},
-            {'nvim-lua/popup.nvim'},
-        } 
-    }
-    use {
-        'nvim-telescope/telescope-fzf-native.nvim',
-        run = 'make',
-        requires = {'nvim-telescope/telescope.nvim'},
-    }
-    use {
-        'fannheyward/telescope-coc.nvim',
-        requires = {'nvim-telescope/telescope.nvim'},
-    }
-    use {
-        'crispgm/telescope-heading.nvim',
-        requires = {'nvim-telescope/telescope.nvim'},
-    }
-    use {
-      'sudormrfbin/cheatsheet.nvim',
-      requires = {
-        {'nvim-telescope/telescope.nvim'},
-        {'nvim-lua/popup.nvim'},
-        {'nvim-lua/plenary.nvim'},
-      }
-    }
+    -- use {
+    --     'nvim-telescope/telescope.nvim',
+    --     requires = {'nvim-lua/plenary.nvim'} 
+    -- }
+    -- -- [ TODO ] only load when dependencies are installed
+    -- use {
+    --     'cljoly/telescope-repo.nvim',
+    --     requires = {'nvim-telescope/telescope.nvim'},
+    -- }
+    -- use {
+    --     'nvim-telescope/telescope-symbols.nvim',
+    --     requires = {'nvim-telescope/telescope.nvim'},
+    -- }
+    -- use {
+    --     'AckslD/nvim-neoclip.lua',
+    --     requires = { 
+    --         {'tami5/sqlite.lua', module = 'sqlite'},
+    --         {'nvim-telescope/telescope.nvim'},
+    --     },
+    --     config = function()
+    --         require('neoclip').setup()
+    --     end,
+    -- }
+    -- use {
+    --     'nvim-telescope/telescope-media-files.nvim',
+    --     requires = {
+    --         {'nvim-telescope/telescope.nvim'},
+    --         {'nvim-lua/popup.nvim'},
+    --     } 
+    -- }
+    -- use {
+    --     'nvim-telescope/telescope-fzf-native.nvim',
+    --     run = 'make',
+    --     requires = {'nvim-telescope/telescope.nvim'},
+    -- }
+    -- use {
+    --     'fannheyward/telescope-coc.nvim',
+    --     requires = {'nvim-telescope/telescope.nvim'},
+    -- }
+    -- use {
+    --     'crispgm/telescope-heading.nvim',
+    --     requires = {'nvim-telescope/telescope.nvim'},
+    -- }
+    -- use {
+    --   'sudormrfbin/cheatsheet.nvim',
+    --   requires = {
+    --     {'nvim-telescope/telescope.nvim'},
+    --     {'nvim-lua/popup.nvim'},
+    --     {'nvim-lua/plenary.nvim'},
+    --   }
+    -- }
     -- ────────────────────────────────────────────────────────────────────
-    use_rocks "inspect"
+    -- use_rocks "inspect"
 end)

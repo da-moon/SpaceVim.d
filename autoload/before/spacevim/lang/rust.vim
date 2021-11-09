@@ -6,5 +6,6 @@ function! before#spacevim#lang#rust#load()
     let g:spacevim_layers['lang#rust']={}
     let g:lsp_servers['rust']='rustup'
     let g:lsp_override_cmd['rust']=["rustup", "run", "nightly", "rust-analyzer"]
+    call add(g:enabled_clients,'rust_analyzer')
   endif
 endfunction

@@ -4,5 +4,6 @@ function! before#spacevim#lang#python#load()
   call SpaceVim#logger#info(l:base_log_msg.'function called.')
   if executable('python')
     let g:spacevim_layers['lang#python']={}
+    call add(g:enabled_clients,'pylsp')
   end
 endfunction

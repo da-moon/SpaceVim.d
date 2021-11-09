@@ -13,5 +13,6 @@ function! before#spacevim#lsp#init#load()
   let g:spacevim_layers['lsp']={
     \ 'filetypes' : filetypes,
     \ 'override_cmd' : g:lsp_override_cmd,
+    \ 'enabled_clients' :g:enabled_clients,
   \ }
 endfunction

@@ -12,11 +12,14 @@ function! before#spacevim#plugins#init#custom_plugins() abort
   " ─────────────────────────────────────────────────────────────────────
   " TODO
   " https://github.com/glepnir/dashboard-nvim
-  call add(g:spacevim_custom_plugins,['wbthomason/packer.nvim'])
+  " '': ':UpdateRemotePlugins'
+  call add(g:spacevim_custom_plugins,['neovim/nvim-lspconfig'])
+  call add(g:spacevim_custom_plugins,['williamboman/nvim-lsp-installer',{'merged':0}])
+  " call add(g:spacevim_custom_plugins,['nvim-treesitter/nvim-treesitter'])
   call add(g:spacevim_custom_plugins,['jvirtanen/vim-hcl',{'on_ft' : 'hcl'}])
   call add(g:spacevim_custom_plugins,['dhruvasagar/vim-table-mode',{'on_ft':'markdown'}])
   call add(g:spacevim_custom_plugins,['junegunn/vim-easy-align'])
-  call add(g:spacevim_custom_plugins,['neoclide/coc.nvim'])
+  call add(g:spacevim_custom_plugins,['neoclide/coc.nvim', { 'merged': 0,'build':'yarn install --frozen-lockfile'}])
   call add(g:spacevim_custom_plugins,['mg979/vim-visual-multi'])
   call add(g:spacevim_custom_plugins,['will133/vim-dirdiff'])
   call add(g:spacevim_custom_plugins,['tarekbecker/vim-yaml-formatter'])
@@ -49,6 +52,7 @@ function! before#spacevim#plugins#init#default_layers() abort
   let g:spacevim_layers['lang#yml']={}
   let g:spacevim_layers['lang#markdown']={}
   let g:spacevim_layers['lang#vim']={}
+  let g:spacevim_layers['treesitter']={}
   if executable('sudo')
     call SpaceVim#logger#info(l:base_log_msg.'"sudo" binary detected. Adding associated layer')
     let g:spacevim_layers['sudo']={}

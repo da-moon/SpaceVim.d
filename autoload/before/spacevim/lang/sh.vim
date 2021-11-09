@@ -8,5 +8,6 @@ function! before#spacevim#lang#sh#load()
       if executable('shfmt')
         call add(g:spacevim_custom_plugins,['z0mbix/vim-shfmt',{ 'on_ft': 'sh' }])
       end
+      call add(g:enabled_clients,'bashls')
     end
 endfunction
